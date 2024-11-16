@@ -11,10 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.rakamin.todolist.databinding.FragmentBottomSheetBinding
+import com.rakamin.todolist.domain.model.TodoList
 import com.rakamin.todolist.services.AlarmReceiver
 import com.google.android.material.R as MaterialResources
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,6 +29,8 @@ class BottomSheetFragment: BottomSheetDialogFragment()  {
     
     private lateinit var _binding: FragmentBottomSheetBinding
     private val binding get() = _binding
+    
+    private val viewModel: TodoListViewModel by viewModels()
 
     private lateinit var alarmReceiver: AlarmReceiver
     private val calendar = Calendar.getInstance()
@@ -92,6 +96,14 @@ class BottomSheetFragment: BottomSheetDialogFragment()  {
                     onceTitle,
                     onceMessage
                 )
+
+                val todoList = TodoList(
+                    date = onceDate,
+                    time = onceTime,
+                    title = onceTitle,
+                    description = onceMessage
+                )
+                viewModel.insertTodoList(todoList)
                 
                 dialog?.hide()
             }

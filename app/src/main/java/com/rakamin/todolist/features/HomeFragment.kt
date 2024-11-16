@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
 import com.rakamin.todolist.R
 import com.rakamin.todolist.databinding.FragmentHomeBinding
@@ -17,6 +18,9 @@ class HomeFragment : Fragment() {
     private lateinit var _binding: FragmentHomeBinding
     private val binding get() = _binding
 
+    private lateinit var adapter: TodoListAdapter
+    private val viewModel: TodoListViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,7 +31,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        adapter = TodoListAdapter()
+        
         initToolbar()
 
         binding.fab.setOnClickListener {
@@ -38,6 +43,17 @@ class HomeFragment : Fragment() {
             val modal = BottomSheetFragment()
             parentFragmentManager.let { modal.show(it, BottomSheetFragment.TAG) }
         }
+        
+        binding.rvTodoList.adapter = adapter
+        adapter.itemOnClick = {
+            viewModel.deleteTodoList(it)
+        }
+
+        viewModel.setTodoList()
+        viewModel.getTodoList.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+        
     }
 
     private fun initToolbar() = with(binding) {

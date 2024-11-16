@@ -23,4 +23,16 @@ class TodoListViewModel @Inject constructor(
             _todoList.emit(list)
         }
     }
+    
+    fun insertTodoList(todoList: TodoList) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertTodoList(todoList)
+        }
+    }
+    
+    fun deleteTodoList(todoList: TodoList) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteTodoList(todoList)
+        }
+    }
 }

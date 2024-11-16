@@ -14,4 +14,13 @@ class TodoListRepositoryImpl @Inject constructor(
         return dao.getAllTodoList()
     }
 
+    override suspend fun insertTodoList(todoList: TodoList) {
+        dao.insertTodoList(todoList)
+    }
+
+    override suspend fun deleteTodoList(todoList: TodoList) {
+        dao.deleteTodoList(todoList)
+    }
+
+
 }
