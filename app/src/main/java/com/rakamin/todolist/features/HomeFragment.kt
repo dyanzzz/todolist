@@ -26,13 +26,14 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = TodoListAdapter()
-        
+        onObserve()
         initToolbar()
 
         binding.fab.setOnClickListener {
@@ -48,12 +49,13 @@ class HomeFragment : Fragment() {
         adapter.itemOnClick = {
             viewModel.deleteTodoList(it)
         }
-
+    }
+    
+    private fun onObserve() {
         viewModel.setTodoList()
         viewModel.getTodoList.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
-        
     }
 
     private fun initToolbar() = with(binding) {

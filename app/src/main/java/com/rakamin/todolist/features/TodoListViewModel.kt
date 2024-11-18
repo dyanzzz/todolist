@@ -8,6 +8,7 @@ import com.rakamin.todolist.domain.repository.TodoListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,12 +16,13 @@ import javax.inject.Inject
 class TodoListViewModel @Inject constructor(
     private val repository: TodoListRepository
 ): ViewModel() {
-    private val _todoList = MutableStateFlow<List<TodoList>>(listOf())
+    private var _todoList = MutableStateFlow<List<TodoList>>(listOf())
     val getTodoList = _todoList.asLiveData()
     fun setTodoList() {
         viewModelScope.launch(Dispatchers.IO) {
-            val list = repository.getList()
-            _todoList.emit(list)
+            repository.getList().collectLatest {
+                _todoList.value = it
+            }
         }
     }
     

@@ -29,7 +29,7 @@ class TodoListAdapter: ListAdapter<TodoList, TodoListAdapter.ViewHolder>(DiffCal
             tvTanggal.text = item.date
             tvDeskripsi.text = item.description
 
-            root.setOnClickListener {
+            btnRemove.setOnClickListener {
                 itemOnClick.invoke(item)
             }
         }
